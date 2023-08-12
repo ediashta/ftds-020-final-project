@@ -1,0 +1,9 @@
+seaborn
+pandas
+matplotlib
+plotly
+Pillow
+scikit-learn==1.2.2
+xgboost
+feature_engine
+streamlit_option_menu
