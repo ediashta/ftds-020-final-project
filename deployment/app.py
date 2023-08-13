@@ -1,6 +1,5 @@
 import streamlit as st
 import eda
-import model_result
 import prediction
 from streamlit_option_menu import option_menu
 
@@ -14,7 +13,6 @@ with st.sidebar:
         "Menu",
         [
             "Distribution",
-            "Model Result",
             "Classification",
         ],
         icons=["bar-chart", "link-45deg", "code-square"],
@@ -24,7 +22,5 @@ with st.sidebar:
 
 if selected == "Distribution":
     eda.distribution()
-elif selected == "Model Result":
-    model_result.report()   
 elif selected == "Classification":
     prediction.predict()

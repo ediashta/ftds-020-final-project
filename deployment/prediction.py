@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
 from urllib import request
@@ -48,7 +47,7 @@ def predict():
     count_change = col2.slider(label="Count Change", step=0.01,min_value=0.0, max_value=5.0, value=0.594)
     util_ratio = col3.slider(label="Utilization Ratio", step=0.01,min_value=0.0, max_value=1.0, value=0.0)
     
-    submit = st.button(label="Submit")
+    submit = st.button(label="Predict")
     
     if submit:
         data_inf = {
@@ -74,8 +73,10 @@ def predict():
         pred_inf = prediction_model.predict(data_inf)
         if pred_inf == 0:
             pred_inf = "Attrited Customer"
+            color = "red"
         else:
             pred_inf = "Existing Customer"
+            color = "green"
             
         if pred_inf == "Attrited Customer":
             cluster_inf = cluster_model.predict(data_inf)
@@ -84,11 +85,23 @@ def predict():
 
         if cluster_inf == 0:
             cluster_inf = "Cluster 1 : High Spent Amount, High Usage Frequency"
+            recommendation = '<ul><li>1. Rewards and Recognition</li><li>2. Personalized Financial Solution</li><li>3. Financial Education</li></ul>'
         elif cluster_inf == 1:
             cluster_inf = "Cluster 2 : Low Spent Amount, Low Usage Frequency"
-            
-        st.write(pred_inf)
-        st.write(cluster_inf)
+            recommendation = '<ul><li>1. Improved Credit Opportunities</li><li>2. Value Propositions</li><li>3. Fee Structure Transparency</li><li>4. Financial Planning Assistance</li></ul>                            '
+        
+        
+        result_html =   """
+                        <div style="background-color:#f0f0f0; padding:10px; border-radius:10px">
+                            <p style="font-size:16px;"><b>Customer Information:</b></p>
+                            <div style="margin-top: 20px;">
+                            </div>
+                            <p>Customer is predicted to be <span style="color:{color};"><b>{pred_inf}</b></span>, and belongs to <span style="color:blue;"><b>{cluster_inf}</b></span>.</p>
+                            <p><b>Here are some recommendations to help reduce churn among customers in corresponding clusters:</b></p>
+                            {step}
+                        </div>
+                        """
+        st.markdown(result_html.format(pred_inf=pred_inf, cluster_inf=cluster_inf, color=color, step=recommendation), unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
